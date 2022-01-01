@@ -33,7 +33,7 @@ def send_text_to_slack(text):
     requests.post(slack_url, data=data)
 
 SUNMOON_BUS = (
-    "id", # id
     "title", # バスのタイトル
     "creation_date", # 作成日
+    "url", # url
 )
