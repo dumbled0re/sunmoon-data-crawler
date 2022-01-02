@@ -30,6 +30,7 @@ class Bus(Base):
     # 更新日時
     title_updated_at = Column(TIMESTAMP(timezone=True), default=func.now())
     creation_date_updated_at = Column(TIMESTAMP(timezone=True), default=func.now())
+    url_updated_at = Column(TIMESTAMP(timezone=True), default=func.now())
 
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     updated_at = Column(TIMESTAMP(timezone=True), onupdate=func.now())
@@ -41,16 +42,16 @@ def recreate_table():
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
 
-def add_several_company_records(bus_list):
+def add_several_bus_records(bus_list):
     bus = [Bus(**dc) for dc in bus_list]
     session.bulk_save_objects(bus, return_defaults=True)
     session.commit()
 
-def update_several_company_records(bus_list):
+def update_several_bus_records(bus_list):
     session.bulk_update_mappings(Bus, bus_list)
     session.commit()
 
-def query_all_bus_records():
+def query_bus_records():
     records = session.query(Bus).all()
     return records
 

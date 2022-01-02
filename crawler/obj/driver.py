@@ -1,17 +1,13 @@
 import os
 import re
-import requests
 from time import sleep
-from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from crawler.utils import send_text_to_slack, SUNMOON_BUS
-from crawler.infra.sql import add_several_company_records, update_several_company_records, query_all_bus_records, query_all_bus_id
+from crawler.infra.sql import add_several_bus_records, update_several_bus_records, query_bus_records, query_all_bus_id
 
 
 class Driver():
@@ -60,18 +56,27 @@ class Driver():
                 print(f'作成日: {bus_dict["creation_date"]}')
         self.__bus_info_list.append(bus_dict)
 
-    # DBにあるデータと比較して作成日が違かったらself.is_updateをTrueにする処理
     def compare_with_db(self):
-        pass
+        bus_records = query_bus_records()
+        for bus_record in bus_records:
+            prev_bus_record = bus_record.__dict__
+            print(f"self.__bus_info_list: {self.__bus_info_list}")
+            print(f"bus_record: {bus_record}")
+            if self.__bus_info_list[0]["creation_date"] != prev_bus_record["creation_date"]:
+                self.is_update = True
 
     def save_bus_info_to_db(self):
         if self.__bus_info_list:
-            add_several_company_records(self.__bus_info_list)
-            print("DBにバス情報を保存しました")
-            if self.is_update:
-                send_text_to_slack(f'シャトルバスの情報が更新されました。URLは"{self.__bus_info_list[0]["url"]}"です')
+            add_several_bus_records(self.__bus_info_list)
+            print("DBに新しいバス情報を保存しました")
+            send_text_to_slack(f'シャトルバスの情報が追加されました。URLは"{self.__bus_info_list[0]["url"]}"です')
+        else:
+            print("新しいバス情報はありませんでした。")
 
-    def update_bus_info(self):
-        pass
-
-
+    def update_exist_bus_info(self):
+        if self.is_update:
+            update_several_bus_records(self.__bus_info_list)
+            print("DBに新しいバス情報を保存しました")
+            send_text_to_slack(f'シャトルバスの情報が更新されました。URLは"{self.__bus_info_list[0]["url"]}"です')
+        else:
+            print("新しいバス情報はありませんでした。")
