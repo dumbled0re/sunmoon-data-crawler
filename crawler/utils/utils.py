@@ -1,7 +1,4 @@
 import re
-import json
-import os
-import requests
 import dotenv
 
 dotenv.load_dotenv()
@@ -23,14 +20,6 @@ def get_rid_of_text(string_soup):
 def preprocess_text(text):
     return bytes(re.sub(' +', ' ', text.strip().replace('\t', ' ').replace("\u3000", ' ').replace('\xa0', ' ')\
         .replace('\n', ' ').replace('<br/>', ' ').replace('\\', '\\\\')), 'utf-8').decode('utf-8', 'ignore')
-
-def send_text_to_slack(text):
-    slack_url = os.getenv('SLACK_WEBHOOK_URL')
-    data = json.dumps({
-        'username': 'incoming-webhook',
-        'text': text,
-    })
-    requests.post(slack_url, data=data)
 
 SUNMOON_BUS = (
     "title", # バスのタイトル
