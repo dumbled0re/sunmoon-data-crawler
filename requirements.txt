@@ -1,7 +1,5 @@
-requests
-beautifulsoup4
-pandas
 python-dotenv
 typeshed-client
 selenium
 SQLAlchemy
+webdriver-manager
