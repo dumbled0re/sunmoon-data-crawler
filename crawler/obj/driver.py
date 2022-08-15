@@ -15,15 +15,15 @@ class Driver():
 
     def __init__(self):
         self.baseurl = os.getenv('BASEURL')
-        self.options = Options()
         self.is_update = False
+        self.options = Options()
+        self.options.add_argument('--headless')
 
         # deploy to heroku
         # self.options.binary_location = '/usr/bin/google-chrome'
-        # self.options.add_argument('--headless')
         # self.options.add_argument('--window-size=1280,1024')
 
-        self.driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=self.options)
 
     def login_to_sunmoon(self):
         self.driver.get(self.baseurl)
@@ -63,6 +63,11 @@ class Driver():
             logger.debug(f"bus_record: {bus_record}")
             if self.__bus_info_list[0]["creation_date"] != prev_bus_record["creation_date"]:
                 self.is_update = True
+
+        if self.driver:
+            # self.driver.close()
+            self.driver.quit()
+            logger.debug('ドライバーを停止しました')
 
     def save_bus_info_to_db(self):
         if self.__bus_info_list:
