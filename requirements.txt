@@ -1,5 +1,0 @@
-python-dotenv
-typeshed-client
-selenium
-SQLAlchemy
-webdriver-manager
