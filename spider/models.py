@@ -16,7 +16,7 @@ db_adapter = DBAdapter(  # nosec
 
 
 class Semester(BASE):
-    __tablename__ = "semester_bus"
+    __tablename__ = "semester"
     bus_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
     crawled_url = Column(TEXT, nullable=False, unique=True, comment="参照URL")
     start_date = Column(TEXT, comment="始まりの記載日時")
@@ -58,7 +58,7 @@ class Semester(BASE):
 
 
 class Holiday(BASE):
-    __tablename__ = "holiday_bus"
+    __tablename__ = "holiday"
     bus_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
     crawled_url = Column(TEXT, nullable=False, unique=True, comment="参照URL")
     start_date = Column(TEXT, comment="始まりの記載日時")
