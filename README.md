@@ -3,7 +3,7 @@
 Sunmoonからバス情報を収集するクローラー
 
 ## DB設計
-[DB設計](https://github.com/dumbled0re/sunmoon-data-crawler/blob/develop/spider/models.py#L18)
+[DB設計](https://github.com/dumbled0re/sunmoon-data-crawler/blob/feature/spider_module/spider/models.py#L18)
 
 ## 収集サイト名/リンク
 [Sunmoon](https://lily.sunmoon.ac.kr/Page2/About/About08_04_02_01_01_01.aspx)
@@ -40,6 +40,8 @@ sunmoon-data-crawler
 │    └── tests
 │        ├── data
 │        ├── docker
+│        │   ├── docker-compose.yaml
+│        │   └── Dockerfile
 │        └── unittest
 ├── .env.sample
 ├── .flake8
