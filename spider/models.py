@@ -15,12 +15,13 @@ db_adapter = DBAdapter(  # nosec
 )
 
 
-class Semester(BASE):
-    __tablename__ = "semester"
-    bus_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
+class SunmoonBus(BASE):
+    __tablename__ = "sunmoon_bus"
+    db_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
     crawled_url = Column(TEXT, nullable=False, unique=True, comment="参照URL")
     start_date = Column(TEXT, comment="始まりの記載日時")
     end_date = Column(TEXT, comment="終わりの記載日時")
+    bus_type = Column(TEXT, comment="学期中か休み中なのか")
     created_at = Column(
         TIMESTAMP(timezone=True), server_default=func.now(), comment="作成日時"
     )
@@ -36,7 +37,7 @@ class Semester(BASE):
         """
         学期中のバス情報をすべて取得
         """
-        res = db_adapter.session.query(Semester).all()
+        res = db_adapter.session.query(SunmoonBus).all()
         return dict(zip([r.id for r in res], [r for r in res]))
 
     @staticmethod
@@ -44,7 +45,7 @@ class Semester(BASE):
         """
         バス情報をまとめて保存
         """
-        buses = [Semester(**dc) for dc in bus_list]
+        buses = [SunmoonBus(**dc) for dc in bus_list]
         db_adapter.session.bulk_save_objects(buses, return_defaults=True)
         db_adapter.session.commit()
 
@@ -53,49 +54,7 @@ class Semester(BASE):
         """
         バス情報をまとめて更新
         """
-        db_adapter.session.bulk_update_mappings(Semester, bus_list)
-        db_adapter.session.commit()
-
-
-class Holiday(BASE):
-    __tablename__ = "holiday"
-    bus_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
-    crawled_url = Column(TEXT, nullable=False, unique=True, comment="参照URL")
-    start_date = Column(TEXT, comment="始まりの記載日時")
-    end_date = Column(TEXT, comment="終わりの記載日時")
-    created_at = Column(
-        TIMESTAMP(timezone=True), server_default=func.now(), comment="作成日時"
-    )
-    updated_at = Column(
-        TIMESTAMP(timezone=True),
-        server_default=func.now(),
-        onupdate=func.now(),
-        comment="更新日時",
-    )
-
-    @staticmethod
-    def select_all() -> dict[int, Any]:
-        """
-        休みのバス情報をすべて取得
-        """
-        res = db_adapter.session.query(Semester).all()
-        return dict(zip([r.id for r in res], [r for r in res]))
-
-    @staticmethod
-    def bulk_insert(bus_list: list[dict[str, str]]) -> None:
-        """
-        バス情報をまとめて保存
-        """
-        buses = [Holiday(**dc) for dc in bus_list]
-        db_adapter.session.bulk_save_objects(buses, return_defaults=True)
-        db_adapter.session.commit()
-
-    @staticmethod
-    def bulk_update(bus_list: list[dict[str, str]]) -> None:
-        """
-        バス情報をまとめて更新
-        """
-        db_adapter.session.bulk_update_mappings(Holiday, bus_list)
+        db_adapter.session.bulk_update_mappings(SunmoonBus, bus_list)
         db_adapter.session.commit()
 
 
@@ -107,7 +66,6 @@ class Driver:
         """
         db_adapter.make_tables(
             tables=[
-                Semester,
-                Holiday,
+                SunmoonBus,
             ]
         )

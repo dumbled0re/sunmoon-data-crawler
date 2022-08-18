@@ -1,10 +1,9 @@
 import time
-from typing import Union
 
 from scrapy import Spider
 
-from spider.items import HolidayItem, SemesterItem
-from spider.models import Driver, Holiday, Semester
+from spider.items import SunmoonItem
+from spider.models import Driver, SunmoonBus
 from spider.utils.constants import BUS_LOG
 from spider.utils.logger import get_logger
 from spider.utils.slack_notify import SlackNotify
@@ -17,15 +16,12 @@ class SpiderPipeline:
     """スパイダーから引き渡されたアイテムオブジェクトを処理するパイプライン"""
 
     def __init__(self) -> None:
-        self._semester = Semester()
-        self._holiday = Holiday()
+        self._sunmoon_bus = SunmoonBus()
         self._db_driver = Driver()
         self._spider_utils = SpiderUtils()
         self._slack = SlackNotify()
-        self._semester_list: list[dict[str, str]] = list()
-        self._holiday_list: list[dict[str, str]] = list()
-        self._num_semesters: int = 0
-        self._num_holidays: int = 0
+        self._bus_list: list[dict[str, str]] = list()
+        self._num_data: int = 0
 
     def open_spider(self, spider: Spider) -> None:
         """スパイダーの起動前に呼び出されるメソッド
@@ -41,31 +37,20 @@ class SpiderPipeline:
             "https://lily.sunmoon.ac.kr/Page2/About/About08_04_02_01_01_01.aspx"
         ]
 
-    def process_item(
-        self, item: Union[SemesterItem, HolidayItem], spider: Spider
-    ) -> Union[SemesterItem, HolidayItem]:
+    def process_item(self, item: SunmoonItem, spider: Spider) -> SunmoonItem:
         """DB保存前にインスタンスごとにバルクに保存し、DBへのアクセス頻度を調整するメソッド
 
         Args:
-            item (SemesterItem or HolidayItem): スパイダーから返されるアイテムオブジェクト
+            item (SunmoonItem): スパイダーから返されるアイテムオブジェクト
             spider (Spider): スパイダークラスのインスタンス
         Returns:
             item: DBに保存するアイテムオブジェクト
         """
 
         try:
-            if isinstance(item, SemesterItem):
-                semester_rows = dict(item)
-                self._semester_list.append(semester_rows)
-                return item
-        except Exception as error:
-            logger.exception(error, extra=dict(spider=spider))
-            raise
-
-        try:
-            if isinstance(item, HolidayItem):
-                holiday_rows = dict(item)
-                self._holiday_list.append(holiday_rows)
+            if isinstance(item, SunmoonItem):
+                bus_rows = dict(item)
+                self._bus_list.append(bus_rows)
                 return item
         except Exception as error:
             logger.exception(error, extra=dict(spider=spider))
@@ -79,14 +64,9 @@ class SpiderPipeline:
         """
 
         try:
-            if self._semester_list:
-                self._semester.bulk_insert(self._semester_list)
-                self._num_semesters += len(self._semester_list)
-
-            if self._holiday_list:
-                self._holiday.bulk_insert(self._holiday_list)
-                self._num_holidays += len(self._holiday_list)
-
+            if self._bus_list:
+                self._sunmoon_bus.bulk_insert(self._bus_list)
+                self._num_data += len(self._bus_list)
         except Exception as error:
             logger.exception(error, extra=dict(spider=spider))
             raise
@@ -100,8 +80,8 @@ class SpiderPipeline:
         elapsed_time_format = f"{str(elapsed_hour).zfill(2)}:{str(elapsed_minute).zfill(2)}:{str(elapsed_second).zfill(2)}"
 
         logger.info(
-            f"[Sunmoon] 追加件数{self._num_semesters + self._num_holidays}件 収集時間: {elapsed_time_format}"
+            f"[Sunmoon] 追加件数{self._num_data}件 収集時間: {elapsed_time_format}"
         )
         self._slack.slack_notify(
-            f"[Sunmoon] 追加件数{self._num_semesters + self._num_holidays}件 収集時間: {elapsed_time_format}"
+            f"[Sunmoon] 追加件数{self._num_data}件 収集時間: {elapsed_time_format}"
         )

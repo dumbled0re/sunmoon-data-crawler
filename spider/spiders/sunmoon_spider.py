@@ -3,7 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
 
-from spider.items import HolidayItem, SemesterItem
+from spider.items import SunmoonItem
 from spider.utils.spider_utils import SpiderUtils
 
 
@@ -33,7 +33,7 @@ class SunmoonSpider(CrawlSpider):
 
     def semester_item(self, response: HtmlResponse) -> ItemLoader:
         semester_item: ItemLoader = SpiderUtils.add_value_to_semester_item(
-            semester_item=ItemLoader(item=SemesterItem(), response=response),
+            semester_item=ItemLoader(item=SunmoonItem(), response=response),
             response=response,
         )
 
@@ -41,7 +41,7 @@ class SunmoonSpider(CrawlSpider):
 
     def holiday_item(self, response: HtmlResponse) -> ItemLoader:
         holiday_item: ItemLoader = SpiderUtils.add_value_to_holiday_item(
-            holiday_item=ItemLoader(item=HolidayItem(), response=response),
+            holiday_item=ItemLoader(item=SunmoonItem(), response=response),
             response=response,
         )
 
