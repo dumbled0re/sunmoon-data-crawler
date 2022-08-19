@@ -10,6 +10,8 @@ Scrapy = "^2.6.2"
 SQLAlchemy = "^1.4.40"
 psycopg2 = "^2.9.3"
 python-dotenv = "^0.20.0"
+slackweb = "^1.0.5"
+cryptography = "36.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

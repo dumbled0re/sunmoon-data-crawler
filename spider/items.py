@@ -1,12 +1,9 @@
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
-
-import scrapy
+from itemloaders.processors import TakeFirst
+from scrapy.item import Field, Item
 
 
-class SpiderItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+class SunmoonItem(Item):
+    start_date = Field(output_processor=TakeFirst())
+    end_date = Field(output_processor=TakeFirst())
+    crawled_url = Field(output_processor=TakeFirst())
+    bus_type = Field(output_processor=TakeFirst())
