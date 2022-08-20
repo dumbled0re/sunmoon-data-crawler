@@ -68,7 +68,7 @@ make crawl
 
 ```
 更新
-crawl_update
+make crawl_update
 ```
 
 ## 保存先テーブル
