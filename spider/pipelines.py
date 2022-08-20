@@ -98,11 +98,13 @@ class SpiderPipelineUpdate(SpiderPipeline):
             spider (Spider): スパイダークラスのインスタンス
         """
 
-        self.start_time = time.time()
+        logger.info("[Sunmoon] 更新処理を開始")
         self._slack.slack_notify("[Sunmoon] 更新処理を開始")
         spider.start_urls = self._sunmoon_bus.select_all_crawled_url()
-        self.db_data = self._sunmoon_bus.select_all()
-        self.update_data_list: list[dict[str, str]] = []
+        self._db_data = self._sunmoon_bus.select_all()
+        self._update_data_list: list[dict[str, str]] = []
+        self._is_semester = False
+        self._is_holiday = False
 
     def process_item(self, item: SunmoonItem, spider: Spider) -> SunmoonItem:
         """DB保存前にインスタンスごとにバルクに保存し、DBへのアクセス頻度を調整するメソッド(Pipelineにデータが渡される時に実行される)
@@ -119,10 +121,15 @@ class SpiderPipelineUpdate(SpiderPipeline):
             if db_data:
                 if self.__check_change_data(db_data, item):
                     update_data = dict(item)
-                    update_data["db_id"] = db_data["db_id"]
-                    self.update_data_list.append(update_data)
+                    update_data["db_id"] = db_data.get("db_id")
+                    self._update_data_list.append(update_data)
+                    if update_data.get("bus_type") == "semester":
+                        self._is_semester = True
+                    if update_data.get("bus_type") == "holiday":
+                        self._is_holiday = True
                 return item
-            raise ValueError("ValueError")
+            else:
+                raise ValueError("ValueError")
         except ValueError as error:
             logger.exception(error, extra=dict(spider=spider))
             raise
@@ -140,7 +147,7 @@ class SpiderPipelineUpdate(SpiderPipeline):
         Returns:
             dict : DBデータ
         """
-        for data_dict in self.db_data:
+        for data_dict in self._db_data:
             if data_dict["bus_type"] == item["bus_type"]:
                 return data_dict
         return None
@@ -171,24 +178,20 @@ class SpiderPipelineUpdate(SpiderPipeline):
         """
 
         try:
-            if self.update_data_list:
-                self._sunmoon_bus.bulk_update(self.update_data_list)
-                self._num_data += len(self.update_data_list)
+            if self._update_data_list:
+                self._sunmoon_bus.bulk_update(self._update_data_list)
         except Exception as error:
             logger.exception(error, extra=dict(spider=spider))
             raise
 
-        elapsed_time = int(time.time() - self.start_time)
-
-        elapsed_hour = elapsed_time // 3600
-        elapsed_minute = (elapsed_time % 3600) // 60
-        elapsed_second = elapsed_time % 3600 % 60
-
-        elapsed_time_format = f"{str(elapsed_hour).zfill(2)}:{str(elapsed_minute).zfill(2)}:{str(elapsed_second).zfill(2)}"
-
-        logger.info(
-            f"[Sunmoon] 更新件数{self._num_data}件 更新時間: {elapsed_time_format}"
-        )
-        self._slack.slack_notify(
-            f"[Sunmoon] 更新件数{self._num_data}件 更新時間: {elapsed_time_format}"
-        )
+        if self._is_semester and self._is_holiday:
+            logger.info("[Sunmoon] 学期中と休み期間の時刻表が更新されました")
+            self._slack.slack_notify("[Sunmoon] 学期中と休み期間の時刻表が更新されました")
+        elif self._is_semester:
+            logger.info("[Sunmoon] 学期中の時刻表が更新されました")
+            self._slack.slack_notify("[Sunmoon] 学期中の時刻表が更新されました")
+        elif self._is_holiday:
+            logger.info("[Sunmoon] 休み期間の時刻表が更新されました")
+            self._slack.slack_notify("[Sunmoon] 休み期間の時刻表が更新されました")
+        else:
+            logger.info("[Sunmoon] 更新されていませんでした")
