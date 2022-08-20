@@ -6,7 +6,7 @@ Sunmoonからバス情報を収集するクローラー
 [DB設計](https://github.com/dumbled0re/sunmoon-data-crawler/blob/feature/spider_module/spider/models.py#L18)
 
 ## 収集サイト名/リンク
-[Sunmoon](https://lily.sunmoon.ac.kr/Page2/About/About08_04_02_01_01_01.aspx)
+[Sunmoon](https://lily.sunmoon.ac.kr/MainDefault3.aspx)
 
 ## 環境構築
 poetry インストール後 以下実行
@@ -61,6 +61,11 @@ sunmoon-data-crawler
 ```
 新規追加
 make crawl
+```
+
+```
+更新
+crawl_update
 ```
 
 ## 保存先テーブル
