@@ -37,6 +37,8 @@ sunmoon-data-crawler
 │    │   ├── models.py                  : DBテーブル定義
 │    │   ├── pipelines,py               : DBに保存する処理
 │    │   └── settings.py                : スパイダー全体の設定
+│    ├── shell
+│    │   └── update.sh
 │    └── tests
 │        ├── data
 │        ├── docker
@@ -47,6 +49,7 @@ sunmoon-data-crawler
 ├── .flake8
 ├── .gitignore
 ├── .pre-commit-config.yaml
+├── crontab.txt
 ├── Makefile　　　　　　　　　　
 ├── mypy.ini
 ├── poetry.lock
