@@ -1,5 +1,3 @@
-from typing import Any
-
 from sqlalchemy import Column, func
 from sqlalchemy.sql.sqltypes import TEXT, TIMESTAMP, Integer
 
@@ -33,12 +31,20 @@ class SunmoonBus(BASE):
     )
 
     @staticmethod
-    def select_all() -> dict[int, Any]:
+    def select_all() -> list[dict[str, str]]:
         """
-        学期中のバス情報をすべて取得
+        バス情報をすべて取得
         """
         res = db_adapter.session.query(SunmoonBus).all()
-        return dict(zip([r.id for r in res], [r for r in res]))
+        return [r.__dict__ for r in res]
+
+    @staticmethod
+    def select_all_crawled_url() -> list[str]:
+        """
+        参照URLをすべて取得
+        """
+        res = db_adapter.session.query(SunmoonBus.crawled_url).all()
+        return [r.crawled_url for r in res]
 
     @staticmethod
     def bulk_insert(bus_list: list[dict[str, str]]) -> None:
