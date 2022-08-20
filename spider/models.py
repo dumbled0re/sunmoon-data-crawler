@@ -47,6 +47,18 @@ class SunmoonBus(BASE):
         return [r.crawled_url for r in res]
 
     @staticmethod
+    def select_crawled_url_and_bus_type() -> dict[str, str]:
+        """
+        参照URLとバスタイプのディクショナリを作成
+        """
+        res = db_adapter.session.query(
+            SunmoonBus.crawled_url, SunmoonBus.bus_type
+        ).all()
+        return dict(
+            zip([r.crawled_url for r in res], [r.bus_type for r in res])
+        )
+
+    @staticmethod
     def bulk_insert(bus_list: list[dict[str, str]]) -> None:
         """
         バス情報をまとめて保存
