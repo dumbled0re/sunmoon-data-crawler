@@ -59,6 +59,22 @@ sunmoon-data-crawler
 └── setup.cfg
 ```
 
+## Git rules
+- コミットメッセージは下記のprefixを使用する。[参考URL](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#type)
+    - feat: 新しい機能追加
+    - fix: バグ修正
+    - docs: ドキュメント修正
+    - style: コードスタイル修正
+    - refactor: リファクタリング
+    - perf: パフォーマンスチューニング
+    - test: テストの追加/修正
+    - chore: 基盤の修正、ライブラリの追加/削除
+
+## プッシュ前にやること
+```
+make pre-commit-check
+```
+
 ## 実行方法
 ### ローカル
 ```
