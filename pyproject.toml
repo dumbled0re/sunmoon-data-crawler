@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "sunmoon crawler"
+version = "0.1.0"
+description = "crawl bus info data from sunmoon"
+authors = ["Sunmoon, uni. <info@sunmoon.ac.kr>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Scrapy = "^2.6.2"
+SQLAlchemy = "^1.4.40"
+psycopg2 = "^2.9.3"
+python-dotenv = "^0.20.0"
+slackweb = "^1.0.5"
+cryptography = "36.0.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^5.0.4"
+flake8-isort = "^4.2.0"
+flake8-bugbear = "^22.7.1"
+flake8-builtins = "^1.5.3"
+flake8-eradicate = "^1.3.0"
+flake8-unused-arguments = "^0.0.11"
+flake8-pytest-style = "^1.6.0"
+pep8-naming = "^0.13.1"
+mypy = "^0.971"
+black = "^22.6.0"
+isort = "^5.10.1"
+pytest-mock = "^3.8.2"
+pytest-cov = "^3.0.0"
+taskipy = "^1.10.2"
+pre-commit = "^2.20.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+# デフォルトだと1行の最大文字数が88になっているので、PEP8に合わせて79文字にする
+line-length = 79
