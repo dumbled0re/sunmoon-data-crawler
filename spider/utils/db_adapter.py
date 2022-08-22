@@ -30,6 +30,7 @@ class DBAdapter:
         env_db_name: Optional[str] = None,
         env_db_user: Optional[str] = None,
         env_db_pass: Optional[str] = None,
+        env_db_port: Optional[str] = None,
     ):
         # dotenv_pathの存在チェック
         is_path_exists(dotenv_path)
@@ -46,6 +47,8 @@ class DBAdapter:
             env_db_user = "DB_USER"
         if env_db_pass is None:
             env_db_pass = "DB_PASS"  # nosec
+        if env_db_port is None:
+            env_db_port = "DB_PORT"  # nosec
 
         # DBのデフォルト
         if db_type is None:
@@ -55,6 +58,7 @@ class DBAdapter:
         self.DB_NAME = os.environ.get(env_db_name)
         self.DB_USER = os.environ.get(env_db_user)
         self.DB_PASS = os.environ.get(env_db_pass)
+        self.DB_PORT = os.environ.get(env_db_port)
         self.DB_URL = self.make_db_url(db_type)
 
         self.__engine = create_engine(
@@ -92,7 +96,7 @@ class DBAdapter:
         # sqlite以外
         else:
             if self.DB_USER and self.DB_PASS and self.DB_HOST and self.DB_NAME:
-                return f"{db_types[db_type]}://{self.DB_USER}:{quote_plus(self.DB_PASS)}@{self.DB_HOST}/{self.DB_NAME}"
+                return f"{db_types[db_type]}://{self.DB_USER}:{quote_plus(self.DB_PASS)}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
             else:
                 raise DBAdapterError("DB 接続情報が十分ではありません")
 
