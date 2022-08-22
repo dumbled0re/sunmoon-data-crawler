@@ -8,16 +8,6 @@ Sunmoonからバス情報を収集するクローラー
 ## 収集サイト名/リンク
 [Sunmoon](https://lily.sunmoon.ac.kr/MainDefault3.aspx)
 
-## 環境構築
-poetry インストール後 以下実行
-```
-make install
-```
-envファイルコピー 記入
-```
-cp .env.sample .env
-```
-
 ## ディレクトリ構造
 
 ```
@@ -35,12 +25,13 @@ sunmoon-data-crawler
 │    │   ├── items.py                   : スパイダーが取得するデータ定義
 │    │   ├── middlewares.py             : スパイダーの設定
 │    │   ├── models.py                  : DBテーブル定義
-│    │   ├── pipelines,py               : DBに保存する処理
+│    │   ├── pipelines.py               : DBに保存する処理
 │    │   └── settings.py                : スパイダー全体の設定
 │    ├── shell
 │    │   └── update.sh
 │    └── tests
 │        ├── data
+│        │   └── table_operations.py
 │        ├── docker
 │        │   ├── docker-compose.yaml
 │        │   └── Dockerfile
@@ -75,15 +66,47 @@ sunmoon-data-crawler
 make pre-commit-check
 ```
 
-## 実行方法
-### ローカル
+## 環境構築
+poetry インストール後 以下実行
 ```
-新規追加
-make crawl
+make install
+```
+envファイルコピー 記入
+```
+cp .env.sample .env
 ```
 
+## 動作確認(Dockerを使う場合)
 ```
-更新
+# ビルド
+make db_local_build
+
+# テーブル作成
+make data_create_table
+
+# テーブル削除
+make data_drop_table
+
+# 終了
+make db_local_down
+```
+
+デフォルトでport = 5432 に postgresql DB が起動する
+### 接続情報
+```
+POSTGRES_HOST=127.0.0.1
+POSTGRES_DB=app
+POSTGRES_PASSWORD=pass
+POSTGRES_USER=postgres
+POSTGRES_DOCKER_PORT=5432
+```
+
+## 実行
+```
+# 新規追加
+make crawl
+
+# 更新
 make crawl_update
 ```
 
