@@ -99,7 +99,7 @@ class SpiderPipelineUpdate(SpiderPipeline):
         """
 
         logger.info("[Sunmoon] 更新処理を開始")
-        self._slack.slack_notify("[Sunmoon] 更新処理を開始")
+        # self._slack.slack_notify("[Sunmoon] 更新処理を開始")
         spider.start_urls = self._sunmoon_bus.select_all_crawled_url()
         self._db_data = self._sunmoon_bus.select_all()
         self._update_data_list: list[dict[str, str]] = []
