@@ -110,7 +110,24 @@ make crawl
 make crawl_update
 ```
 
+## AWS
+インスタンス名: sunmoon
+
+実行場所: /home/ec2-user/sunmoon-data-crawler
+
+### EC2
+```
+# cronで実行
+sunmoon-data-crawler/shell/update.sh
+```
+
+### cron
+```
+0 15 * * * /home/ec2-user/sunmoon-data-crawler/shell/update.sh &&  >> /home/ec2-user/sunmoon-data-crawler/logs/bus_log.txt 2>&1
+```
+
 ## 保存先テーブル
 ```
-sunmoon_bus
+prd: sunmoon_bus
+stg: sunmoon_bus_stg
 ```
