@@ -1,5 +1,5 @@
 create_env_local:
-	cp ./.env.example ./app/.env.local
+	cp ./.env.example ./app/.env
 
 docker_build:
 	cd docker/ && docker-compose --env-file ../app/.env up -d --build
