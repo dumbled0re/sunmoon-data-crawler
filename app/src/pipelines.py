@@ -2,13 +2,12 @@ import time
 from typing import Optional
 
 from scrapy import Spider
-
-from spider.items import SunmoonItem
-from spider.models import Driver, SunmoonBus
-from spider.utils.constants import BUS_LOG
-from spider.utils.logger import get_logger
-from spider.utils.slack_notify import SlackNotify
-from spider.utils.spider_utils import SpiderUtils
+from src.items import SunmoonItem
+from src.models import Driver, SunmoonBus
+from src.utils.constants import BUS_LOG
+from src.utils.logger import get_logger
+from src.utils.slack_notify import SlackNotify
+from src.utils.spider_utils import SpiderUtils
 
 logger = get_logger(__name__, BUS_LOG)
 

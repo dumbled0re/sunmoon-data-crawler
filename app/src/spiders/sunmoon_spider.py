@@ -2,10 +2,9 @@ from scrapy.http.response.html import HtmlResponse
 from scrapy.linkextractors import LinkExtractor
 from scrapy.loader import ItemLoader
 from scrapy.spiders import CrawlSpider, Rule
-
-from spider.items import SunmoonItem
-from spider.models import SunmoonBus
-from spider.utils.spider_utils import SpiderUtils
+from src.items import SunmoonItem
+from src.models import SunmoonBus
+from src.utils.spider_utils import SpiderUtils
 
 
 class SunmoonSpider(CrawlSpider):
@@ -13,7 +12,7 @@ class SunmoonSpider(CrawlSpider):
     allowed_domains: list[str] = ["sunmoon.ac.kr"]
     custom_settings: dict[str, dict[str, int]] = {
         "ITEM_PIPELINES": {
-            "spider.pipelines.SpiderPipeline": 300,
+            "src.pipelines.SpiderPipeline": 300,
         }
     }
 
@@ -54,7 +53,7 @@ class SunmoonSpiderUpdate(SunmoonSpider):
     allowed_domains: list[str] = ["sunmoon.ac.kr"]
     custom_settings: dict[str, dict[str, int]] = {
         "ITEM_PIPELINES": {
-            "spider.pipelines.SpiderPipelineUpdate": 300,
+            "src.pipelines.SpiderPipelineUpdate": 300,
         }
     }
 

@@ -28,14 +28,14 @@ class SunmoonBus(Base):
 
 def create_table() -> None:
     """
-    テスト用のテーブル枠の作成
+    テスト用のテーブル作成
     """
     engine = create_engine(
         "postgresql://{user}:{password}@{host}:{port}/{dbname}".format(
             user=os.getenv("POSTGRES_USER"),
             password=os.getenv("POSTGRES_PASSWORD"),
             host=os.getenv("POSTGRES_HOST"),
-            port=os.getenv("POSTGRES_DOCKER_PORT", 5432),
+            port=os.getenv("POSTGRES_PORT"),
             dbname=os.getenv("POSTGRES_DB"),
         ),
         echo=True,
@@ -44,12 +44,15 @@ def create_table() -> None:
 
 
 def drop_table() -> None:
+    """
+    テスト用のテーブル削除
+    """
     engine = create_engine(
         "postgresql://{user}:{password}@{host}:{port}/{dbname}".format(
             user=os.getenv("POSTGRES_USER"),
             password=os.getenv("POSTGRES_PASSWORD"),
             host=os.getenv("POSTGRES_HOST"),
-            port=os.getenv("POSTGRES_DOCKER_PORT", 5432),
+            port=os.getenv("POSTGRES_PORT"),
             dbname=os.getenv("POSTGRES_DB"),
         ),
         echo=True,

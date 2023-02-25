@@ -1,7 +1,6 @@
 from sqlalchemy import Column, func
 from sqlalchemy.sql.sqltypes import TEXT, TIMESTAMP, Integer
-
-from spider.utils.db_adapter import BASE, DBAdapter
+from src.utils.db_adapter import BASE, DBAdapter
 
 db_adapter = DBAdapter(  # nosec
     dotenv_path=".env",

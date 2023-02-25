@@ -9,8 +9,8 @@
 
 BOT_NAME = "spider"
 
-SPIDER_MODULES = ["spider.spiders"]
-NEWSPIDER_MODULE = "spider.spiders"
+SPIDER_MODULES = ["src.spiders"]
+NEWSPIDER_MODULE = "src.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -45,7 +45,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-    "spider.middlewares.SpiderSpiderMiddleware": 543,
+    "src.middlewares.SpiderSpiderMiddleware": 543,
 }
 
 # Enable or disable downloader middlewares
