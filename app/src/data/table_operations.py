@@ -15,8 +15,8 @@ class SunmoonBus(Base):
     __tablename__ = "sunmoon_bus"
     db_id = Column(Integer, primary_key=True)
     crawled_url = Column(TEXT, nullable=False, unique=True)
-    start_date = Column(TEXT)
-    end_date = Column(TEXT)
+    start_date = Column(TIMESTAMP(timezone=True))
+    end_date = Column(TIMESTAMP(timezone=True))
     bus_type = Column(TEXT)
     created_at = Column(TIMESTAMP(timezone=True), server_default=func.now())
     updated_at = Column(
