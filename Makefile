@@ -1,4 +1,4 @@
-create_env_local:
+create_env:
 	cp ./.env.example ./app/.env
 
 docker_build:
