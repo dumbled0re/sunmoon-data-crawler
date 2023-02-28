@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from typing import Optional
 
 from scrapy import Spider
@@ -162,9 +163,19 @@ class SpiderPipelineUpdate(SpiderPipeline):
         Returns:
             bool: 真偽値
         """
+
+        update_db_start_date = str(db_data["start_date"]).split()[0]
+        update_db_end_date = str(db_data["end_date"]).split()[0]
+        update_item_start_date = str(
+            datetime.strptime(item["start_date"].replace(".", ""), "%Y%m%d")
+        ).split()[0]
+        update_item_end_date = str(
+            datetime.strptime(item["end_date"].replace(".", ""), "%Y%m%d")
+        ).split()[0]
+
         if (
-            db_data["start_date"] != item["start_date"]
-            or db_data["end_date"] != item["end_date"]
+            update_db_start_date != update_item_start_date
+            or update_db_end_date != update_item_end_date
         ):
             return True
         return False
