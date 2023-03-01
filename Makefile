@@ -1,20 +1,26 @@
-crawl:
-	@poetry run scrapy crawl sunmoon_spider
+create_env:
+	cp ./.env.example ./app/.env
 
-crawl_update:
-	@poetry run scrapy crawl sunmoon_spider_update
+docker_build:
+	cd docker/ && docker-compose --env-file ../app/.env up -d --build
 
-db_local_build:
-	cd tests/docker/ && docker-compose --env-file ../../.env up -d
+docker_up:
+	cd docker/ && docker-compose --env-file ../app/.env up -d
 
-db_local_down:
-	cd tests/docker/ && docker-compose down
+docker_down:
+	cd docker/ && docker-compose down
 
 data_create_table:
-	@poetry run python -m tests.data.table_operations create
+	docker exec -it my_scrapy python src/data/table_operations.py create
 
 data_drop_table:
-	@poetry run python -m tests.data.table_operations drop
+	docker exec -it my_scrapy python src/data/table_operations.py drop
+
+crawl:
+	docker exec -it my_scrapy scrapy crawl sunmoon_spider
+
+crawl_update:
+	docker exec -it my_scrapy scrapy crawl sunmoon_spider_update
 
 install:
 	@poetry install

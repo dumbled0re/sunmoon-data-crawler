@@ -1,14 +1,14 @@
 import time
+from datetime import datetime
 from typing import Optional
 
 from scrapy import Spider
-
-from spider.items import SunmoonItem
-from spider.models import Driver, SunmoonBus
-from spider.utils.constants import BUS_LOG
-from spider.utils.logger import get_logger
-from spider.utils.slack_notify import SlackNotify
-from spider.utils.spider_utils import SpiderUtils
+from src.items import SunmoonItem
+from src.models import Driver, SunmoonBus
+from src.utils.constants import BUS_LOG
+from src.utils.logger import get_logger
+from src.utils.slack_notify import SlackNotify
+from src.utils.spider_utils import SpiderUtils
 
 logger = get_logger(__name__, BUS_LOG)
 
@@ -163,9 +163,19 @@ class SpiderPipelineUpdate(SpiderPipeline):
         Returns:
             bool: 真偽値
         """
+
+        update_db_start_date = str(db_data["start_date"]).split()[0]
+        update_db_end_date = str(db_data["end_date"]).split()[0]
+        update_item_start_date = str(
+            datetime.strptime(item["start_date"].replace(".", ""), "%Y%m%d")
+        ).split()[0]
+        update_item_end_date = str(
+            datetime.strptime(item["end_date"].replace(".", ""), "%Y%m%d")
+        ).split()[0]
+
         if (
-            db_data["start_date"] != item["start_date"]
-            or db_data["end_date"] != item["end_date"]
+            update_db_start_date != update_item_start_date
+            or update_db_end_date != update_item_end_date
         ):
             return True
         return False

@@ -1,0 +1,25 @@
+version: "3"
+services:
+  db:
+    image: postgres:11-alpine
+    container_name: my_postgresql
+    ports:
+      - "${POSTGRES_DOCKER_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      TZ: "Asia/Tokyo"
+    env_file:
+      - ../app/.env
+  scrapy:
+      depends_on:
+        - db
+      build:
+        context: ..
+        dockerfile: Dockerfile
+      image: scrapy:2.6.1
+      container_name: my_scrapy
+      volumes:
+        - ../app:/usr/src/app
+      tty: true

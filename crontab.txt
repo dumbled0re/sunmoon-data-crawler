@@ -1,1 +1,1 @@
-0 15 * * * /home/ec2-user/sunmoon-data-crawler/shell/update.sh &&  >> /home/ec2-user/sunmoon-data-crawler/logs/bus_log.txt 2>&1
+0 1,13 * * * /home/ec2-user/sunmoon-data-crawler/update.sh && >> /home/ec2-user/sunmoon-data-crawler/app/log/bus_log.txt 2>&1

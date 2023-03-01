@@ -2,9 +2,8 @@ import re
 
 from scrapy.http.response.html import HtmlResponse
 from scrapy.loader import ItemLoader
-
-from spider.utils.constants import BUS_LOG
-from spider.utils.logger import get_logger
+from src.utils.constants import BUS_LOG
+from src.utils.logger import get_logger
 
 logger = get_logger(__name__, BUS_LOG)
 

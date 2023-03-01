@@ -1,7 +1,6 @@
 from sqlalchemy import Column, func
 from sqlalchemy.sql.sqltypes import TEXT, TIMESTAMP, Integer
-
-from spider.utils.db_adapter import BASE, DBAdapter
+from src.utils.db_adapter import BASE, DBAdapter
 
 db_adapter = DBAdapter(  # nosec
     dotenv_path=".env",
@@ -17,8 +16,8 @@ class SunmoonBus(BASE):
     __tablename__ = "sunmoon_bus"
     db_id = Column(Integer, primary_key=True, comment="DBで付与されるid")
     crawled_url = Column(TEXT, nullable=False, unique=True, comment="参照URL")
-    start_date = Column(TEXT, comment="始まりの記載日時")
-    end_date = Column(TEXT, comment="終わりの記載日時")
+    start_date = Column(TIMESTAMP(timezone=True), comment="始まりの記載日時")
+    end_date = Column(TIMESTAMP(timezone=True), comment="終わりの記載日時")
     bus_type = Column(TEXT, comment="学期中か休み中なのか")
     created_at = Column(
         TIMESTAMP(timezone=True), server_default=func.now(), comment="作成日時"
