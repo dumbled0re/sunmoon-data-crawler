@@ -81,7 +81,7 @@ make install
 .envファイル作成
 
 ```
-make create_env_local
+make create_env
 ```
 
 ## 動作確認
