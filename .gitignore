@@ -138,5 +138,6 @@ dmypy.json
 # PyCharm Editor
 .idea
 
-logs/*.log*
+app/log/*.log*
+docker/db/data
 test.py
