@@ -12,6 +12,8 @@ services:
       TZ: "Asia/Tokyo"
     env_file:
       - ../app/.env
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
   scrapy:
       depends_on:
         - db
