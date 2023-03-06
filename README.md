@@ -4,7 +4,7 @@ Sunmoon からバス情報を収集するクローラー
 
 ## DB 設計
 
-[DB 設計](https://github.com/dumbled0re/sunmoon-data-crawler/blob/feature/spider_module/spider/models.py#L18)
+[DB 設計](https://github.com/dumbled0re/sunmoon-data-crawler/blob/develop/app/src/models.py#L15)
 
 ## 収集サイト名/リンク
 
